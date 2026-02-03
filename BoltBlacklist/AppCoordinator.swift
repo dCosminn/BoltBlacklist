@@ -27,7 +27,6 @@ class AppCoordinator: ObservableObject {
               let image = UIImage(data: data) else {
             return
         }
-        
         DispatchQueue.main.async {
             self.sharedImage = image
             self.shouldRunOCR = true
