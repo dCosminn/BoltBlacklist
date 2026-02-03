@@ -7,12 +7,25 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		175898372F31607F0084B9C3 /* BoltBlacklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoltBlacklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		175898372F31607F0084B9C3 /* BoltBlacklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = BoltBlacklist.app; path = "/Users/cosmin/Documents/test/test/BoltBlacklist/build/Debug-iphoneos/BoltBlacklist.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		176C4EDF2F32306800623DD0 /* Exceptions for "BoltBlacklist" folder in "BoltBlacklist" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 175898362F31607E0084B9C3 /* BoltBlacklist */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		175898392F31607F0084B9C3 /* BoltBlacklist */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				176C4EDF2F32306800623DD0 /* Exceptions for "BoltBlacklist" folder in "BoltBlacklist" target */,
+			);
 			path = BoltBlacklist;
 			sourceTree = "<group>";
 		};
@@ -33,16 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				175898392F31607F0084B9C3 /* BoltBlacklist */,
-				175898382F31607F0084B9C3 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		175898382F31607F0084B9C3 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				175898372F31607F0084B9C3 /* BoltBlacklist.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -82,6 +86,7 @@
 				TargetAttributes = {
 					175898362F31607E0084B9C3 = {
 						CreatedOnToolsVersion = 26.1;
+						LastSwiftMigration = 2610;
 					};
 				};
 			};
@@ -95,7 +100,7 @@
 			mainGroup = 1758982E2F31607E0084B9C3;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 175898382F31607F0084B9C3 /* Products */;
+			productRefGroup = 1758982E2F31607E0084B9C3;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -249,10 +254,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BoltBlacklist/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -269,6 +276,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -280,10 +288,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BoltBlacklist/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
