@@ -6,30 +6,43 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		17F352A02F33873A00485FA4 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3528F2F33873A00485FA4 /* AppCoordinator.swift */; };
+		17F352A12F33873A00485FA4 /* BoltBlacklistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352912F33873A00485FA4 /* BoltBlacklistApp.swift */; };
+		17F352A22F33873A00485FA4 /* FileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352922F33873A00485FA4 /* FileService.swift */; };
+		17F352A32F33873A00485FA4 /* ImageCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352932F33873A00485FA4 /* ImageCanvasView.swift */; };
+		17F352A42F33873A00485FA4 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352942F33873A00485FA4 /* ImagePicker.swift */; };
+		17F352A52F33873A00485FA4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352962F33873A00485FA4 /* MainView.swift */; };
+		17F352A62F33873A00485FA4 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352972F33873A00485FA4 /* MainViewModel.swift */; };
+		17F352A72F33873A00485FA4 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352982F33873A00485FA4 /* Models.swift */; };
+		17F352A82F33873A00485FA4 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352992F33873A00485FA4 /* OCRService.swift */; };
+		17F352A92F33873A00485FA4 /* OverlayQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3529A2F33873A00485FA4 /* OverlayQueueManager.swift */; };
+		17F352AA2F33873A00485FA4 /* OverlayQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3529B2F33873A00485FA4 /* OverlayQueueView.swift */; };
+		17F352AB2F33873A00485FA4 /* RectangleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3529C2F33873A00485FA4 /* RectangleManager.swift */; };
+		17F352AC2F33873A00485FA4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3529E2F33873A00485FA4 /* ShareViewController.swift */; };
+		17F352AD2F33873A00485FA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17F352902F33873A00485FA4 /* Assets.xcassets */; };
+		17F352AF2F33873A00485FA4 /* ShareExtension-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 17F3529D2F33873A00485FA4 /* ShareExtension-Info.plist */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		175898372F31607F0084B9C3 /* BoltBlacklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = BoltBlacklist.app; path = "/Users/cosmin/Documents/test/test/BoltBlacklist/build/Debug-iphoneos/BoltBlacklist.app"; sourceTree = "<absolute>"; };
+		17F3526E2F323BE500485FA4 /* BoltBlacklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoltBlacklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		17F3528F2F33873A00485FA4 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		17F352902F33873A00485FA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		17F352912F33873A00485FA4 /* BoltBlacklistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoltBlacklistApp.swift; sourceTree = "<group>"; };
+		17F352922F33873A00485FA4 /* FileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileService.swift; sourceTree = "<group>"; };
+		17F352932F33873A00485FA4 /* ImageCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCanvasView.swift; sourceTree = "<group>"; };
+		17F352942F33873A00485FA4 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		17F352952F33873A00485FA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		17F352962F33873A00485FA4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		17F352972F33873A00485FA4 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		17F352982F33873A00485FA4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		17F352992F33873A00485FA4 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		17F3529A2F33873A00485FA4 /* OverlayQueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayQueueManager.swift; sourceTree = "<group>"; };
+		17F3529B2F33873A00485FA4 /* OverlayQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayQueueView.swift; sourceTree = "<group>"; };
+		17F3529C2F33873A00485FA4 /* RectangleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleManager.swift; sourceTree = "<group>"; };
+		17F3529D2F33873A00485FA4 /* ShareExtension-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ShareExtension-Info.plist"; sourceTree = "<group>"; };
+		17F3529E2F33873A00485FA4 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		176C4EDF2F32306800623DD0 /* Exceptions for "BoltBlacklist" folder in "BoltBlacklist" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 175898362F31607E0084B9C3 /* BoltBlacklist */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		175898392F31607F0084B9C3 /* BoltBlacklist */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				176C4EDF2F32306800623DD0 /* Exceptions for "BoltBlacklist" folder in "BoltBlacklist" target */,
-			);
-			path = BoltBlacklist;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		175898342F31607E0084B9C3 /* Frameworks */ = {
@@ -45,8 +58,32 @@
 		1758982E2F31607E0084B9C3 = {
 			isa = PBXGroup;
 			children = (
-				175898392F31607F0084B9C3 /* BoltBlacklist */,
+				17F3529F2F33873A00485FA4 /* BoltBlacklist */,
+				17F3526E2F323BE500485FA4 /* BoltBlacklist.app */,
 			);
+			sourceTree = "<group>";
+		};
+		17F3529F2F33873A00485FA4 /* BoltBlacklist */ = {
+			isa = PBXGroup;
+			children = (
+				17F3528F2F33873A00485FA4 /* AppCoordinator.swift */,
+				17F352902F33873A00485FA4 /* Assets.xcassets */,
+				17F352912F33873A00485FA4 /* BoltBlacklistApp.swift */,
+				17F352922F33873A00485FA4 /* FileService.swift */,
+				17F352932F33873A00485FA4 /* ImageCanvasView.swift */,
+				17F352942F33873A00485FA4 /* ImagePicker.swift */,
+				17F352952F33873A00485FA4 /* Info.plist */,
+				17F352962F33873A00485FA4 /* MainView.swift */,
+				17F352972F33873A00485FA4 /* MainViewModel.swift */,
+				17F352982F33873A00485FA4 /* Models.swift */,
+				17F352992F33873A00485FA4 /* OCRService.swift */,
+				17F3529A2F33873A00485FA4 /* OverlayQueueManager.swift */,
+				17F3529B2F33873A00485FA4 /* OverlayQueueView.swift */,
+				17F3529C2F33873A00485FA4 /* RectangleManager.swift */,
+				17F3529D2F33873A00485FA4 /* ShareExtension-Info.plist */,
+				17F3529E2F33873A00485FA4 /* ShareViewController.swift */,
+			);
+			path = BoltBlacklist;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -64,14 +101,11 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				175898392F31607F0084B9C3 /* BoltBlacklist */,
-			);
 			name = BoltBlacklist;
 			packageProductDependencies = (
 			);
 			productName = BoltBlacklist;
-			productReference = 175898372F31607F0084B9C3 /* BoltBlacklist.app */;
+			productReference = 17F3526E2F323BE500485FA4 /* BoltBlacklist.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -114,6 +148,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17F352AD2F33873A00485FA4 /* Assets.xcassets in Resources */,
+				17F352AF2F33873A00485FA4 /* ShareExtension-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +160,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17F352A02F33873A00485FA4 /* AppCoordinator.swift in Sources */,
+				17F352A12F33873A00485FA4 /* BoltBlacklistApp.swift in Sources */,
+				17F352A22F33873A00485FA4 /* FileService.swift in Sources */,
+				17F352A32F33873A00485FA4 /* ImageCanvasView.swift in Sources */,
+				17F352A42F33873A00485FA4 /* ImagePicker.swift in Sources */,
+				17F352A52F33873A00485FA4 /* MainView.swift in Sources */,
+				17F352A62F33873A00485FA4 /* MainViewModel.swift in Sources */,
+				17F352A72F33873A00485FA4 /* Models.swift in Sources */,
+				17F352A82F33873A00485FA4 /* OCRService.swift in Sources */,
+				17F352A92F33873A00485FA4 /* OverlayQueueManager.swift in Sources */,
+				17F352AA2F33873A00485FA4 /* OverlayQueueView.swift in Sources */,
+				17F352AB2F33873A00485FA4 /* RectangleManager.swift in Sources */,
+				17F352AC2F33873A00485FA4 /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
