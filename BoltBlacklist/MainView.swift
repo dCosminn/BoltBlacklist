@@ -28,13 +28,7 @@ struct MainView: View {
                 )
                 .padding(.bottom, 24)
             }
-            
-            // Overlay queue
-            OverlayQueueView(
-                queue: viewModel.overlayQueue.queue,
-                onTap: { viewModel.handleOverlayTap(id: $0) },
-                onRemove: { id in viewModel.overlayQueue.removeItem(withId: id) }
-            )
+
         }
         .sheet(isPresented: $viewModel.showPhotoPicker) {
             ImagePicker(image: $viewModel.currentImage)
