@@ -48,7 +48,9 @@ struct MainView: View {
             TextField("File name", text: $viewModel.newFileName)
             Button("OK") { viewModel.saveFileName() }
             Button("Cancel", role: .cancel) {}
-        }
+        } message: {
+            Text("Enter name for your OCR results file")
+        }        
         .alert("Add Text", isPresented: $viewModel.showAddTextDialog) {
             TextField("Enter text", text: $viewModel.additionalText)
             Button("OK") { viewModel.saveKeyWithText() }
