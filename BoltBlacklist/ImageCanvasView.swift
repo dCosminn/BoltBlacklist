@@ -17,10 +17,6 @@ struct ImageCanvasView: View {
                             GeometryReader { imageGeo in
                                 Color.clear.onAppear {
                                     imageDisplayRect = imageGeo.frame(in: .local)
-                                    
-                                    // Keep rectangle inside the image bounds
-                                    rectangleManager.rect = rectangleManager.rect
-                                        .intersection(imageGeo.frame(in: .local))
                                 }
                                 .onChange(of: imageGeo.size) {
                                     imageDisplayRect = imageGeo.frame(in: .local)
