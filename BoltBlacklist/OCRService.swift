@@ -50,20 +50,39 @@ class OCRService {
         }
     }
     
-    private func calculateCropRect(overlayRect: CGRect, imageSize: CGSize, displayRect: CGRect) -> CGRect {
-        let scaleX = imageSize.width / displayRect.width
-        let scaleY = imageSize.height / displayRect.height
-        
-        let x = (overlayRect.minX - displayRect.minX) * scaleX
-        let y = (overlayRect.minY - displayRect.minY) * scaleY
-        let width = overlayRect.width * scaleX
-        let height = overlayRect.height * scaleY
-        
+    private func calculateCropRect(
+        overlayRect: CGRect,
+        imageSize: CGSize,
+        displayRect: CGRect
+    ) -> CGRect {
+
+        // 1. Determine scale used by .scaledToFit
+        let scale = min(
+            displayRect.width / imageSize.width,
+            displayRect.height / imageSize.height
+        )
+
+        let scaledImageSize = CGSize(
+            width: imageSize.width * scale,
+            height: imageSize.height * scale
+        )
+
+        // 2. Calculate letterbox offsets
+        let xOffset = (displayRect.width - scaledImageSize.width) / 2
+        let yOffset = (displayRect.height - scaledImageSize.height) / 2
+
+        // 3. Convert overlay rect → image-local space
+        let imageX = (overlayRect.minX - xOffset) / scale
+        let imageY = (overlayRect.minY - yOffset) / scale
+        let imageWidth = overlayRect.width / scale
+        let imageHeight = overlayRect.height / scale
+
+        // 4. Clamp safely to image bounds
         return CGRect(
-            x: max(0, min(x, imageSize.width)),
-            y: max(0, min(y, imageSize.height)),
-            width: min(width, imageSize.width - max(0, x)),
-            height: min(height, imageSize.height - max(0, y))
+            x: max(0, min(imageX, imageSize.width)),
+            y: max(0, min(imageY, imageSize.height)),
+            width: min(imageWidth, imageSize.width - imageX),
+            height: min(imageHeight, imageSize.height - imageY)
         )
     }
     
