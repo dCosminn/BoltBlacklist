@@ -3,18 +3,19 @@ import SwiftUI
 struct OverlayQueueView: View {
     let queue: [OverlayKey]
     let onTap: (UUID) -> Void
-    let onRemove: (Int) -> Void
+    let onRemove: (UUID) -> Void // <-- FIX: use UUID instead of Int
     
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 10) {
-                    ForEach(Array(queue.enumerated()), id: \.element.id) { index, item in
+                    // FIX: ForEach uses the item's id, not index
+                    ForEach(queue) { item in
                         OverlayKeyCard(
                             item: item,
                             onTap: { onTap(item.id) },
-                            onSwipe: { onRemove(index) }
+                            onSwipe: { onRemove(item.id) } // pass UUID
                         )
                     }
                 }
@@ -56,7 +57,7 @@ struct OverlayKeyCard: View {
             }
             .onEnded { value in
                 if abs(value.translation.width) > 80 {
-                    onSwipe()
+                    onSwipe() // triggers removal by UUID now
                 } else if abs(value.translation.width) < 10 {
                     onTap()
                 }

@@ -22,14 +22,8 @@ class OverlayQueueManager: ObservableObject {
         save()
     }
     
-    func remove(at index: Int) {
-        guard queue.indices.contains(index) else { return }
-        queue.remove(at: index)
-        save()
-    }
-    
     func removeItem(withId id: UUID) {
-        queue.removeAll { $0.id == id }
+        queue.removeAll { $0.id == id } // <-- FIX: remove by UUID
         save()
     }
     
