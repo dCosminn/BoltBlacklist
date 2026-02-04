@@ -125,6 +125,7 @@ struct CornerHandle: View {
         DragGesture()
             .onChanged { value in
                 var newRect = rect
+                let minSize: CGFloat = 45
                 
                 switch corner {
                 case .topLeft:
@@ -146,7 +147,7 @@ struct CornerHandle: View {
                 }
                 
                 // Enforce constraints
-                if newRect.width >= 100 && newRect.height >= 100 &&
+                if newRect.width >= minSize && newRect.height >= minSize &&
                    newRect.minX >= 0 && newRect.maxX <= containerSize.width &&
                    newRect.minY >= 0 && newRect.maxY <= containerSize.height {
                     rect = newRect
