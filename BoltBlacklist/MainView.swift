@@ -4,11 +4,11 @@ import PhotosUI
 struct MainView: View {
     @EnvironmentObject var coordinator: AppCoordinator
     @StateObject private var viewModel = MainViewModel()
-    
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
                 // Image area
                 ImageCanvasView(
@@ -16,7 +16,7 @@ struct MainView: View {
                     rectangleManager: viewModel.rectangleManager,
                     imageDisplayRect: $viewModel.imageDisplayRect
                 )
-                
+
                 // Buttons
                 ButtonBar(
                     onPickImage: { viewModel.showPhotoPicker = true },
@@ -29,6 +29,11 @@ struct MainView: View {
                 .padding(.bottom, 24)
             }
 
+            // ✅ OVERLAY QUEUE (this was missing)
+            OverlayQueueView(
+                queueManager: viewModel.overlayQueue,
+                onTap: { viewModel.handleOverlayTap(id: $0) }
+            )
         }
         .sheet(isPresented: $viewModel.showPhotoPicker) {
             ImagePicker(image: $viewModel.currentImage)
@@ -44,7 +49,7 @@ struct MainView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Enter name for your OCR results file")
-        }        
+        }
         .alert("Add Text", isPresented: $viewModel.showAddTextDialog) {
             TextField("Enter text", text: $viewModel.additionalText)
             Button("OK") { viewModel.saveKeyWithText() }
@@ -64,12 +69,15 @@ struct MainView: View {
     }
 }
 
+//
 // MARK: - Button Bar
+//
+
 struct ButtonBar: View {
     let onPickImage: () -> Void
     let onChangeFile: () -> Void
     let onRunOCR: () -> Void
-    
+
     var body: some View {
         HStack(spacing: 16) {
             ActionButton(title: "File Name", color: .purple, action: onChangeFile)
@@ -83,7 +91,7 @@ struct ActionButton: View {
     let title: String
     let color: Color
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
