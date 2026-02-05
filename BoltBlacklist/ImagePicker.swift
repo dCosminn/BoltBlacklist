@@ -35,7 +35,6 @@ struct ImagePicker: UIViewControllerRepresentable {
                   provider.canLoadObject(ofClass: UIImage.self) else {
                 return
             }
-            
             provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
                 DispatchQueue.main.async {
                     self?.parent.image = image as? UIImage

@@ -31,16 +31,15 @@ struct ImageCanvasView: View {
                     Text("No Image")
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                
-                // Rectangle overlay
+                }                
+                //Rectangle overlay
                 ResizableRectangle(
                     rect: $rectangleManager.rect,
                     containerSize: image != nil ? imageDisplayRect.size : geometry.size,
                     onDragEnd: { rectangleManager.save() }
                 )
             }
-            // Define the coordinate space on the container
+            //Define the coordinate space on the container
             .coordinateSpace(name: "Canvas")
             .onAppear {
                 rectangleManager.initialize(in: geometry.size)
