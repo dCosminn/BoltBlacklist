@@ -1,5 +1,7 @@
 import SwiftUI
+import UIKit
 
+// MARK: - Image Canvas with Resizable Rectangle
 struct ImageCanvasView: View {
     @Binding var image: UIImage?
     @ObservedObject var rectangleManager: RectangleManager
@@ -8,40 +10,39 @@ struct ImageCanvasView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Image if available
-                if let image = image {
-                    Image(uiImage: image)
+                // Display the image
+                if let img = image {
+                    Image(uiImage: img)
                         .resizable()
                         .scaledToFit()
                         .background(
-                            GeometryReader { imageGeo in
-                                Color.clear.onAppear {
-                                    imageDisplayRect = imageGeo.frame(in: .local)
-                                }
-                                .onChange(of: imageGeo.size) {
-                                    imageDisplayRect = imageGeo.frame(in: .local)
-                                }
+                            GeometryReader { geo in
+                                Color.clear
+                                    // Use named coordinate space to get REAL screen position
+                                    .onAppear {
+                                        imageDisplayRect = geo.frame(in: .named("Canvas"))
+                                    }
+                                    .onChange(of: geo.frame(in: .named("Canvas"))) { _, newFrame in
+                                        imageDisplayRect = newFrame
+                                    }
                             }
                         )
                 } else {
-                    // Placeholder when no image
                     Text("No Image")
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 
-                // Rectangle always visible
+                // Rectangle overlay
                 ResizableRectangle(
                     rect: $rectangleManager.rect,
                     containerSize: image != nil ? imageDisplayRect.size : geometry.size,
                     onDragEnd: { rectangleManager.save() }
                 )
             }
+            // Define the coordinate space on the container
+            .coordinateSpace(name: "Canvas")
             .onAppear {
-                // Initialize rectangle to screen if not already
-                rectangleManager.initialize(in: geometry.size)
-            }
-            .onChange(of: geometry.size) {
                 rectangleManager.initialize(in: geometry.size)
             }
         }
@@ -54,16 +55,24 @@ struct ResizableRectangle: View {
     let containerSize: CGSize
     let onDragEnd: () -> Void
     
-    @State private var dragOffset: CGSize = .zero
+    @State private var startRect: CGRect = .zero
     
     var body: some View {
         ZStack {
-            // Rectangle outline
+            // Invisible draggable area (fills entire rectangle)
             Rectangle()
-                .stroke(Color.red, lineWidth: 2)
+                .fill(Color.white.opacity(0.001))  //Nearly invisible but draggable!
                 .frame(width: rect.width, height: rect.height)
-                .position(x: rect.midX + dragOffset.width, y: rect.midY + dragOffset.height)
+                .position(x: rect.midX, y: rect.midY)
                 .gesture(moveGesture)
+            
+
+            // Visible border
+            Rectangle()
+                .stroke(Color.red, lineWidth: 3)
+                .frame(width: rect.width, height: rect.height)
+                .position(x: rect.midX, y: rect.midY)
+                .allowsHitTesting(false)  //Don't block gestures!
             
             // Corner handles
             ForEach(Corner.allCases, id: \.self) { corner in
@@ -72,13 +81,16 @@ struct ResizableRectangle: View {
         }
     }
     
+    
+    // Move the rectangle
     private var moveGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                dragOffset = value.translation
-            }
-            .onEnded { value in
-                var newRect = rect
+                if startRect == .zero {
+                    startRect = rect
+                }
+                
+                var newRect = startRect
                 newRect.origin.x += value.translation.width
                 newRect.origin.y += value.translation.height
                 
@@ -87,13 +99,15 @@ struct ResizableRectangle: View {
                 newRect.origin.y = max(0, min(newRect.origin.y, containerSize.height - newRect.height))
                 
                 rect = newRect
-                dragOffset = .zero
+            }
+            .onEnded { _ in
+                startRect = .zero
                 onDragEnd()
             }
     }
 }
 
-// MARK: - Corner Handle
+// MARK: - Corner Handles
 enum Corner: CaseIterable {
     case topLeft, topRight, bottomLeft, bottomRight
 }
@@ -104,12 +118,24 @@ struct CornerHandle: View {
     let containerSize: CGSize
     let onEnd: () -> Void
     
+    @State private var startRect: CGRect = .zero
+    
     var body: some View {
-        Circle()
-            .fill(Color.red)
-            .frame(width: 15, height: 15)
-            .position(position)
-            .gesture(resizeGesture)
+        ZStack {
+            // Larger invisible tap target (44x44 - Apple's recommended minimum)
+            Circle()
+                .fill(Color.white.opacity(0.001))
+                .frame(width: 44, height: 44)
+                .position(position)
+                .gesture(resizeGesture)
+            
+            // Visible handle
+            Circle()
+                .fill(Color.red)
+                .frame(width: 20, height: 20)
+                .position(position)
+                .allowsHitTesting(false)
+        }
     }
     
     private var position: CGPoint {
@@ -124,38 +150,102 @@ struct CornerHandle: View {
     private var resizeGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                var newRect = rect
-                let minSize: CGFloat = 45
+                if startRect == .zero {
+                    startRect = rect
+                }
+                
+                let minSize: CGFloat = 30
+                
+                // Calculate the new corner position
+                var newRect = startRect
                 
                 switch corner {
                 case .topLeft:
-                    newRect.origin.x += value.translation.width
-                    newRect.size.width -= value.translation.width
-                    newRect.origin.y += value.translation.height
-                    newRect.size.height -= value.translation.height
+                    // Moving top-left corner
+                    let newX = startRect.minX + value.translation.width
+                    let newY = startRect.minY + value.translation.height
+                    
+                    // Don't allow going past opposite corner (minus minimum size)
+                    let maxX = startRect.maxX - minSize
+                    let maxY = startRect.maxY - minSize
+                    
+                    let clampedX = min(newX, maxX)
+                    let clampedY = min(newY, maxY)
+                    
+                    newRect = CGRect(
+                        x: clampedX,
+                        y: clampedY,
+                        width: startRect.maxX - clampedX,
+                        height: startRect.maxY - clampedY
+                    )
+                    
                 case .topRight:
-                    newRect.size.width += value.translation.width
-                    newRect.origin.y += value.translation.height
-                    newRect.size.height -= value.translation.height
+                    // Moving top-right corner
+                    let newX = startRect.maxX + value.translation.width
+                    let newY = startRect.minY + value.translation.height
+                    
+                    // Don't allow going past opposite corner (minus minimum size)
+                    let minX = startRect.minX + minSize
+                    let maxY = startRect.maxY - minSize
+                    
+                    let clampedX = max(newX, minX)
+                    let clampedY = min(newY, maxY)
+                    
+                    newRect = CGRect(
+                        x: startRect.minX,
+                        y: clampedY,
+                        width: clampedX - startRect.minX,
+                        height: startRect.maxY - clampedY
+                    )
+                    
                 case .bottomLeft:
-                    newRect.origin.x += value.translation.width
-                    newRect.size.width -= value.translation.width
-                    newRect.size.height += value.translation.height
+                    // Moving bottom-left corner
+                    let newX = startRect.minX + value.translation.width
+                    let newY = startRect.maxY + value.translation.height
+                    
+                    // Don't allow going past opposite corner (minus minimum size)
+                    let maxX = startRect.maxX - minSize
+                    let minY = startRect.minY + minSize
+                    
+                    let clampedX = min(newX, maxX)
+                    let clampedY = max(newY, minY)
+                    
+                    newRect = CGRect(
+                        x: clampedX,
+                        y: startRect.minY,
+                        width: startRect.maxX - clampedX,
+                        height: clampedY - startRect.minY
+                    )
+                    
                 case .bottomRight:
-                    newRect.size.width += value.translation.width
-                    newRect.size.height += value.translation.height
+                    // Moving bottom-right corner
+                    let newX = startRect.maxX + value.translation.width
+                    let newY = startRect.maxY + value.translation.height
+                    
+                    // Don't allow going past opposite corner (minus minimum size)
+                    let minX = startRect.minX + minSize
+                    let minY = startRect.minY + minSize
+                    
+                    let clampedX = max(newX, minX)
+                    let clampedY = max(newY, minY)
+                    
+                    newRect = CGRect(
+                        x: startRect.minX,
+                        y: startRect.minY,
+                        width: clampedX - startRect.minX,
+                        height: clampedY - startRect.minY
+                    )
                 }
                 
-                // Enforce constraints
-                if newRect.width >= minSize && newRect.height >= minSize &&
-                   newRect.minX >= 0 && newRect.maxX <= containerSize.width &&
+                // Keep in bounds
+                if newRect.minX >= 0 && newRect.maxX <= containerSize.width &&
                    newRect.minY >= 0 && newRect.maxY <= containerSize.height {
                     rect = newRect
                 }
             }
             .onEnded { _ in
+                startRect = .zero
                 onEnd()
             }
     }
 }
-

@@ -4,20 +4,26 @@ import Vision
 class OCRService {
     static let shared = OCRService()
     
-    func recognizeText(in image: UIImage, rect: CGRect, imageDisplayRect: CGRect, completion: @escaping (Result<String, Error>) -> Void) {
+    func recognizeText(
+        in image: UIImage,
+        rect: CGRect,
+        imageDisplayRect: CGRect,
+        completion: @escaping (Result<String, Error>) -> Void
+    ) {
         guard let cgImage = image.cgImage else {
             completion(.failure(OCRError.invalidImage))
             return
         }
         
-        // Calculate crop rectangle in image coordinates
+        // Simple coordinate conversion - displayRect now has correct x/y offsets!
         let cropRect = calculateCropRect(
             overlayRect: rect,
             imageSize: image.size,
+            imageScale: image.scale,
             displayRect: imageDisplayRect
         )
         
-        guard let croppedImage = cgImage.cropping(to: cropRect) else {
+        guard let croppedCGImage = cgImage.cropping(to: cropRect) else {
             completion(.failure(OCRError.croppingFailed))
             return
         }
@@ -44,45 +50,44 @@ class OCRService {
         request.recognitionLevel = .accurate
         request.usesLanguageCorrection = true
         
-        let handler = VNImageRequestHandler(cgImage: croppedImage, options: [:])
+        let handler = VNImageRequestHandler(cgImage: croppedCGImage, options: [:])
         DispatchQueue.global(qos: .userInitiated).async {
             try? handler.perform([request])
         }
     }
-    
+        
     private func calculateCropRect(
         overlayRect: CGRect,
         imageSize: CGSize,
-        displayRect: CGRect
+        imageScale: CGFloat,
+        displayRect: CGRect  // Now contains the real X/Y offsets (e.g., x:35 for letterbox)
     ) -> CGRect {
-
-        // 1. Determine scale used by .scaledToFit
-        let scale = min(
-            displayRect.width / imageSize.width,
-            displayRect.height / imageSize.height
-        )
-
-        let scaledImageSize = CGSize(
-            width: imageSize.width * scale,
-            height: imageSize.height * scale
-        )
-
-        // 2. Calculate letterbox offsets
-        let xOffset = (displayRect.width - scaledImageSize.width) / 2
-        let yOffset = (displayRect.height - scaledImageSize.height) / 2
-
-        // 3. Convert overlay rect → image-local space
-        let imageX = (overlayRect.minX - xOffset) / scale
-        let imageY = (overlayRect.minY - yOffset) / scale
-        let imageWidth = overlayRect.width / scale
-        let imageHeight = overlayRect.height / scale
-
-        // 4. Clamp safely to image bounds
+        
+        // 1. Calculate the scale (Image Pixels vs Screen Points)
+        let pixelWidth = imageSize.width * imageScale
+        let pixelHeight = imageSize.height * imageScale
+        
+        // Scale factor (width ratio - height ratio is identical due to aspect fit)
+        let scale = pixelWidth / displayRect.width
+        
+        // 2. Subtract the Display Offset (Black Bars) to find X/Y relative to the image
+        // overlayRect is in Screen Coordinates
+        // displayRect is the Image's Screen Coordinates (includes offset!)
+        let relativeX = overlayRect.minX - displayRect.minX
+        let relativeY = overlayRect.minY - displayRect.minY
+        
+        // 3. Convert to Image Pixels
+        let cropX = relativeX * scale
+        let cropY = relativeY * scale
+        let cropWidth = overlayRect.width * scale
+        let cropHeight = overlayRect.height * scale
+        
+        // 4. Create safe rect preventing out-of-bounds crashes
         return CGRect(
-            x: max(0, min(imageX, imageSize.width)),
-            y: max(0, min(imageY, imageSize.height)),
-            width: min(imageWidth, imageSize.width - imageX),
-            height: min(imageHeight, imageSize.height - imageY)
+            x: max(0, min(cropX, pixelWidth - 1)),
+            y: max(0, min(cropY, pixelHeight - 1)),
+            width: min(cropWidth, pixelWidth - max(0, cropX)),
+            height: min(cropHeight, pixelHeight - max(0, cropY))
         )
     }
     

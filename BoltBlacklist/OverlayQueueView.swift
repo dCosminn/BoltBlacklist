@@ -31,6 +31,7 @@ struct OverlayKeyCard: View {
     let onSwipe: () -> Void
     
     @State private var offset: CGFloat = 0
+    @State private var isDragging = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 2) {
@@ -45,22 +46,38 @@ struct OverlayKeyCard: View {
         .background(Color(white: 0.19))
         .cornerRadius(10)
         .offset(x: offset)
-        .gesture(swipeGesture)
+        .contentShape(Rectangle())  //Makes ENTIRE card tappable (including padding!)
+        .onTapGesture {  //Separate tap gesture - much more reliable!
+            if !isDragging {
+                onTap()
+            }
+        }
+        .gesture(swipeGesture)  //Only for swipes
     }
     
     private var swipeGesture: some Gesture {
-        DragGesture()
+        DragGesture(minimumDistance: 10)  //Needs 10px movement to start
             .onChanged { value in
+                isDragging = true
                 offset = value.translation.width
             }
             .onEnded { value in
-                if abs(value.translation.width) > 80 {
+                let horizontalMovement = abs(value.translation.width)
+                let verticalMovement = abs(value.translation.height)
+                
+                // Only swipe if mostly horizontal and moved enough
+                if horizontalMovement > 80 && horizontalMovement > verticalMovement {
                     onSwipe()
-                } else if abs(value.translation.width) < 10 {
-                    onTap()
                 }
-                withAnimation {
+                
+                // Bounce back with spring animation
+                withAnimation(.spring(response: 0.3)) {
                     offset = 0
+                }
+                
+                // Delay resetting isDragging so tap doesn't trigger
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isDragging = false
                 }
             }
     }

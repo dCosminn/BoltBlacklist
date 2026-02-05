@@ -29,7 +29,7 @@ struct MainView: View {
                 .padding(.bottom, 24)
             }
 
-            // ✅ OVERLAY QUEUE (this was missing)
+            // OVERLAY QUEUE (this was missing)
             OverlayQueueView(
                 queueManager: viewModel.overlayQueue,
                 onTap: { viewModel.handleOverlayTap(id: $0) }
