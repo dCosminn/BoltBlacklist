@@ -9,6 +9,7 @@ class MainViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var showFileNameDialog = false
     @Published var showAddTextDialog = false
+    @Published var showShareSheet = false
     @Published var newFileName = ""
     @Published var additionalText = ""
     @Published var imageDisplayRect: CGRect = .zero
@@ -73,6 +74,10 @@ class MainViewModel: ObservableObject {
         guard !name.isEmpty else { return }
         fileService.setFileName(name)
         showMessage("File name updated")
+    }
+    
+    func openFile() {
+        showShareSheet = true
     }
     
     func handleOverlayTap(id: UUID) {

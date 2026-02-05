@@ -20,10 +20,7 @@ struct MainView: View {
                 // Buttons
                 ButtonBar(
                     onPickImage: { viewModel.showPhotoPicker = true },
-                    onChangeFile: {
-                        viewModel.newFileName = FileService.shared.getFileName()
-                        viewModel.showFileNameDialog = true
-                    },
+                    onOpenFile: { viewModel.openFile() },
                     onRunOCR: { viewModel.runOCR() }
                 )
                 .padding(.bottom, 24)
@@ -37,6 +34,9 @@ struct MainView: View {
         }
         .sheet(isPresented: $viewModel.showPhotoPicker) {
             ImagePicker(image: $viewModel.currentImage)
+        }
+        .sheet(isPresented: $viewModel.showShareSheet) {
+            ShareSheet(fileURL: FileService.shared.getFileURL())
         }
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("OK") {}
@@ -75,12 +75,12 @@ struct MainView: View {
 
 struct ButtonBar: View {
     let onPickImage: () -> Void
-    let onChangeFile: () -> Void
+    let onOpenFile: () -> Void
     let onRunOCR: () -> Void
 
     var body: some View {
         HStack(spacing: 16) {
-            ActionButton(title: "File Name", color: .purple, action: onChangeFile)
+            ActionButton(title: "Open File", color: .purple, action: onOpenFile)
             ActionButton(title: "Add Picture", color: .purple, action: onPickImage)
             ActionButton(title: "Run OCR", color: .teal, action: onRunOCR)
         }

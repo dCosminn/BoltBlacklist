@@ -12,6 +12,13 @@ class FileService {
         return docs.appendingPathComponent(fileName)
     }
     
+    func getFileURL() -> URL {        
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            try? "".write(to: fileURL, atomically: true, encoding: .utf8)
+        }
+        return fileURL
+    }
+    
     func setFileName(_ name: String) {
         UserDefaults.standard.set(name, forKey: "ocr_file_name")
     }
