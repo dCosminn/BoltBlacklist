@@ -4,6 +4,8 @@ import PhotosUI
 struct MainView: View {
     @EnvironmentObject var coordinator: AppCoordinator
     @StateObject private var viewModel = MainViewModel()
+    @Environment(\.scenePhase) private var scenePhase
+    
 
     var body: some View {
         ZStack {
@@ -68,6 +70,11 @@ struct MainView: View {
                 }
             }
         }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                viewModel.loadLatestScreenshotIfNeeded()
+            }
+        }        
     }
 }
 
@@ -91,8 +98,8 @@ struct ButtonBar: View {
             
             // Bottom row - OCR buttons
             HStack(spacing: 16) {
-                ActionButton(title: "OCR Bolt 🟢", color: .green, action: onRunBoltOCR)
-                ActionButton(title: "OCR Uber 🔴", color: .red, action: onRunUberOCR)
+                ActionButton(title: "OCR Bolt", color: .green, action: onRunBoltOCR)
+                ActionButton(title: "OCR Uber", color: .red, action: onRunUberOCR)
             }
         }
     }

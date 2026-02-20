@@ -22,6 +22,7 @@ class MainViewModel: ObservableObject {
     private var selectedKeyId: UUID?
     private let fileService = FileService.shared
     private let ocrService = OCRService.shared
+    private var lastScreenshotIdentifier: String?
     
     init() {
         newFileName = fileService.getFileName()
@@ -133,5 +134,23 @@ class MainViewModel: ObservableObject {
         alertTitle = "Notice"
         alertMessage = message
         showAlert = true
+    }
+    func loadLatestScreenshotIfNeeded() {
+        PhotoService.shared.getLatestScreenshotWithIdentifier { [weak self] image, identifier in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                guard let identifier = identifier else { return }
+
+                // If it's the same screenshot, do nothing
+                if identifier == self.lastScreenshotIdentifier {
+                    return
+                }
+
+                // New screenshot detected
+                self.lastScreenshotIdentifier = identifier
+                self.currentImage = image
+            }
+        }
     }
 }

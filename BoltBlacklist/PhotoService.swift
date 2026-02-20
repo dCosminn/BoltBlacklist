@@ -76,4 +76,46 @@ class PhotoService {
             }
         }
     }
+    func getLatestScreenshotWithIdentifier(completion: @escaping (UIImage?, String?) -> Void) {
+
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+
+        guard status == .authorized else {
+            completion(nil, nil)
+            return
+        }
+
+        let screenshotsAlbum = PHAssetCollection.fetchAssetCollections(
+            with: .smartAlbum,
+            subtype: .smartAlbumScreenshots,
+            options: nil
+        )
+
+        guard let screenshots = screenshotsAlbum.firstObject else {
+            completion(nil, nil)
+            return
+        }
+
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.fetchLimit = 1
+
+        let assets = PHAsset.fetchAssets(in: screenshots, options: fetchOptions)
+
+        guard let latestScreenshot = assets.firstObject else {
+            completion(nil, nil)
+            return
+        }
+
+        let identifier = latestScreenshot.localIdentifier
+
+        PHImageManager.default().requestImage(
+            for: latestScreenshot,
+            targetSize: PHImageManagerMaximumSize,
+            contentMode: .aspectFit,
+            options: nil
+        ) { image, _ in
+            completion(image, identifier)
+        }
+    }
 }
