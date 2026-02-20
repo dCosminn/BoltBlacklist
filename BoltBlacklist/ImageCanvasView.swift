@@ -4,7 +4,8 @@ import UIKit
 // MARK: - Image Canvas with Resizable Rectangle
 struct ImageCanvasView: View {
     @Binding var image: UIImage?
-    @ObservedObject var rectangleManager: RectangleManager
+    @ObservedObject var boltRectangleManager: RectangleManager
+    @ObservedObject var uberRectangleManager: RectangleManager
     @Binding var imageDisplayRect: CGRect
     
     var body: some View {
@@ -28,21 +29,32 @@ struct ImageCanvasView: View {
                             }
                         )
                 } else {
-                    Text("No Image")
+                    Text("No Picture")
+                        .font(.system(size: 24, weight: .medium))
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }                
-                //Rectangle overlay
+                }
+                // Bolt Rectangle (GREEN)
                 ResizableRectangle(
-                    rect: $rectangleManager.rect,
+                    rect: $boltRectangleManager.rect,
                     containerSize: image != nil ? imageDisplayRect.size : geometry.size,
-                    onDragEnd: { rectangleManager.save() }
+                    color: .green,
+                    onDragEnd: { boltRectangleManager.save() }
+                )
+
+                // Uber Rectangle (RED)
+                ResizableRectangle(
+                    rect: $uberRectangleManager.rect,
+                    containerSize: image != nil ? imageDisplayRect.size : geometry.size,
+                    color: .red,
+                    onDragEnd: { uberRectangleManager.save() }
                 )
             }
             //Define the coordinate space on the container
             .coordinateSpace(name: "Canvas")
             .onAppear {
-                rectangleManager.initialize(in: geometry.size)
+                boltRectangleManager.initialize(in: geometry.size)
+                uberRectangleManager.initialize(in: geometry.size)
             }
         }
     }
@@ -52,6 +64,7 @@ struct ImageCanvasView: View {
 struct ResizableRectangle: View {
     @Binding var rect: CGRect
     let containerSize: CGSize
+    let color: Color  // ← ADD THIS
     let onDragEnd: () -> Void
     
     @State private var startRect: CGRect = .zero
@@ -68,14 +81,14 @@ struct ResizableRectangle: View {
 
             // Visible border
             Rectangle()
-                .stroke(Color.red, lineWidth: 3)
+                .stroke(color, lineWidth: 3)
                 .frame(width: rect.width, height: rect.height)
                 .position(x: rect.midX, y: rect.midY)
                 .allowsHitTesting(false)  //Don't block gestures!
             
             // Corner handles
             ForEach(Corner.allCases, id: \.self) { corner in
-                CornerHandle(corner: corner, rect: $rect, containerSize: containerSize, onEnd: onDragEnd)
+                CornerHandle(corner: corner, rect: $rect, containerSize: containerSize, color: color, onEnd: onDragEnd)
             }
         }
     }
@@ -115,6 +128,7 @@ struct CornerHandle: View {
     let corner: Corner
     @Binding var rect: CGRect
     let containerSize: CGSize
+    let color: Color  // ← ADD THIS
     let onEnd: () -> Void
     
     @State private var startRect: CGRect = .zero
@@ -130,7 +144,7 @@ struct CornerHandle: View {
             
             // Visible handle
             Circle()
-                .fill(Color.red)
+                .fill(color)
                 .frame(width: 20, height: 20)
                 .position(position)
                 .allowsHitTesting(false)

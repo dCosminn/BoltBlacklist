@@ -3,7 +3,7 @@ import Combine
 
 class AppCoordinator: ObservableObject {
     @Published var sharedImage: UIImage?
-    @Published var shouldRunOCR = false
+    @Published var shouldRunBoltOCR = false  // Auto-run Bolt OCR when sharing
     
     func handleURL(_ url: URL) {
         if url.scheme == "boltblacklist" {
@@ -29,7 +29,7 @@ class AppCoordinator: ObservableObject {
         }
         DispatchQueue.main.async {
             self.sharedImage = image
-            self.shouldRunOCR = true
+            self.shouldRunBoltOCR = true  // Trigger automatic Bolt OCR
         }
     }
 }

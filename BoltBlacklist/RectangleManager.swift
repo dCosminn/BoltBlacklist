@@ -4,9 +4,13 @@ import Combine
 final class RectangleManager: ObservableObject {
     @Published var rect: CGRect = .zero
 
-    private let storageKey = "rect_position"
+    private let storageKey: String
     private var containerSize: CGSize = .zero
     private var hasInitialized = false
+    
+    init(storageKey: String = "rect_position") {
+        self.storageKey = storageKey
+    }
 
     // MARK: - Initialization (run ONCE)
     func initialize(in size: CGSize) {

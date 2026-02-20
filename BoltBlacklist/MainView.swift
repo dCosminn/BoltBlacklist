@@ -13,7 +13,8 @@ struct MainView: View {
                 // Image area
                 ImageCanvasView(
                     image: $viewModel.currentImage,
-                    rectangleManager: viewModel.rectangleManager,
+                    boltRectangleManager: viewModel.boltRectangleManager,
+                    uberRectangleManager: viewModel.uberRectangleManager,
                     imageDisplayRect: $viewModel.imageDisplayRect
                 )
 
@@ -21,12 +22,13 @@ struct MainView: View {
                 ButtonBar(
                     onPickImage: { viewModel.showPhotoPicker = true },
                     onOpenFile: { viewModel.openFile() },
-                    onRunOCR: { viewModel.runOCR() }
+                    onRunBoltOCR: { viewModel.runBoltOCR() },
+                    onRunUberOCR: { viewModel.runUberOCR() }
                 )
                 .padding(.bottom, 24)
             }
 
-            // OVERLAY QUEUE (this was missing)
+            // Overlay queue
             OverlayQueueView(
                 queueManager: viewModel.overlayQueue,
                 onTap: { viewModel.handleOverlayTap(id: $0) }
@@ -58,10 +60,10 @@ struct MainView: View {
         .onChange(of: coordinator.sharedImage) { _, image in
             if let image = image {
                 viewModel.currentImage = image
-                if coordinator.shouldRunOCR {
+                if coordinator.shouldRunBoltOCR {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        viewModel.runOCR()
-                        coordinator.shouldRunOCR = false
+                        viewModel.runBoltOCR()  // Auto-run Bolt OCR
+                        coordinator.shouldRunBoltOCR = false
                     }
                 }
             }
@@ -76,13 +78,22 @@ struct MainView: View {
 struct ButtonBar: View {
     let onPickImage: () -> Void
     let onOpenFile: () -> Void
-    let onRunOCR: () -> Void
+    let onRunBoltOCR: () -> Void
+    let onRunUberOCR: () -> Void
 
     var body: some View {
-        HStack(spacing: 16) {
-            ActionButton(title: "Open File", color: .purple, action: onOpenFile)
-            ActionButton(title: "Add Picture", color: .purple, action: onPickImage)
-            ActionButton(title: "Run OCR", color: .teal, action: onRunOCR)
+        VStack(spacing: 12) {
+            // Top row - File and Picture buttons
+            HStack(spacing: 16) {
+                ActionButton(title: "Open File", color: .purple, action: onOpenFile)
+                ActionButton(title: "Add Picture", color: .purple, action: onPickImage)
+            }
+            
+            // Bottom row - OCR buttons
+            HStack(spacing: 16) {
+                ActionButton(title: "OCR Bolt 🟢", color: .green, action: onRunBoltOCR)
+                ActionButton(title: "OCR Uber 🔴", color: .red, action: onRunUberOCR)
+            }
         }
     }
 }

@@ -14,7 +14,9 @@ class MainViewModel: ObservableObject {
     @Published var additionalText = ""
     @Published var imageDisplayRect: CGRect = .zero
     
-    let rectangleManager = RectangleManager()
+    // TWO rectangle managers - one for Bolt (green), one for Uber (red)
+    let boltRectangleManager = RectangleManager(storageKey: "bolt_rect_position")
+    let uberRectangleManager = RectangleManager(storageKey: "uber_rect_position")
     let overlayQueue = OverlayQueueManager()
     
     private var selectedKeyId: UUID?
@@ -23,9 +25,30 @@ class MainViewModel: ObservableObject {
     
     init() {
         newFileName = fileService.getFileName()
+        loadLatestScreenshot()  // Auto-load on open
     }
     
-    func runOCR() {
+    // Load newest screenshot from Photos
+    func loadLatestScreenshot() {
+        PhotoService.shared.getLatestScreenshot { [weak self] image in
+            DispatchQueue.main.async {
+                self?.currentImage = image
+            }
+        }
+    }
+    
+    // Run OCR for Bolt (green rectangle)
+    func runBoltOCR() {
+        runOCR(using: boltRectangleManager, service: "Bolt")
+    }
+    
+    // Run OCR for Uber (red rectangle)
+    func runUberOCR() {
+        runOCR(using: uberRectangleManager, service: "Uber")
+    }
+    
+    // Generic OCR function (private)
+    private func runOCR(using rectangleManager: RectangleManager, service: String) {
         guard let image = currentImage else {
             showMessage("No image loaded")
             return
@@ -42,12 +65,12 @@ class MainViewModel: ObservableObject {
             imageDisplayRect: imageDisplayRect
         ) { [weak self] result in
             DispatchQueue.main.async {
-                self?.handleOCRResult(result)
+                self?.handleOCRResult(result, service: service)
             }
         }
     }
     
-    private func handleOCRResult(_ result: Result<String, Error>) {
+    private func handleOCRResult(_ result: Result<String, Error>, service: String) {
         switch result {
         case .success(let text):
             guard !text.isEmpty else {

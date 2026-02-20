@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		176CF5CD2F48B8BA0021F5F3 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176CF5CC2F48B8B20021F5F3 /* PhotoService.swift */; };
 		17EFFB5D2F34E0E700BF6259 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFFB5C2F34E0AA00BF6259 /* ShareSheet.swift */; };
 		17F352A02F33873A00485FA4 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3528F2F33873A00485FA4 /* AppCoordinator.swift */; };
 		17F352A12F33873A00485FA4 /* BoltBlacklistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F352912F33873A00485FA4 /* BoltBlacklistApp.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		176CF5CC2F48B8B20021F5F3 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		17EFFB5C2F34E0AA00BF6259 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		17F3526E2F323BE500485FA4 /* BoltBlacklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoltBlacklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17F3528F2F33873A00485FA4 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 		17F3529F2F33873A00485FA4 /* BoltBlacklist */ = {
 			isa = PBXGroup;
 			children = (
+				176CF5CC2F48B8B20021F5F3 /* PhotoService.swift */,
 				17EFFB5C2F34E0AA00BF6259 /* ShareSheet.swift */,
 				17F3528F2F33873A00485FA4 /* AppCoordinator.swift */,
 				17F352902F33873A00485FA4 /* Assets.xcassets */,
@@ -168,6 +171,7 @@
 				17F352A22F33873A00485FA4 /* FileService.swift in Sources */,
 				17F352A32F33873A00485FA4 /* ImageCanvasView.swift in Sources */,
 				17F352A42F33873A00485FA4 /* ImagePicker.swift in Sources */,
+				176CF5CD2F48B8BA0021F5F3 /* PhotoService.swift in Sources */,
 				17F352A52F33873A00485FA4 /* MainView.swift in Sources */,
 				17F352A62F33873A00485FA4 /* MainViewModel.swift in Sources */,
 				17F352A72F33873A00485FA4 /* Models.swift in Sources */,
