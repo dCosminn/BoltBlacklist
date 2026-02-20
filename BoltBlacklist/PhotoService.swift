@@ -16,39 +16,64 @@ class PhotoService {
                 if newStatus == .authorized || newStatus == .limited {
                     self.fetchLatestScreenshot(completion: completion)
                 } else {
+                    print("Photos permission denied")
                     completion(nil)
                 }
             }
         } else {
+            print("Photos permission not granted: \(status.rawValue)")
             completion(nil)
         }
     }
     
     private func fetchLatestScreenshot(completion: @escaping (UIImage?) -> Void) {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        fetchOptions.fetchLimit = 1
+        // Fetch directly from Screenshots album
+        let screenshotsAlbum = PHAssetCollection.fetchAssetCollections(
+            with: .smartAlbum,
+            subtype: .smartAlbumScreenshots,
+            options: nil
+        )
         
-        // Fetch screenshots
-        let screenshots = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        
-        guard let asset = screenshots.firstObject else {
+        guard let screenshots = screenshotsAlbum.firstObject else {
+            print("Screenshots album not found")
             completion(nil)
             return
         }
+        
+        // Fetch assets from Screenshots album
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        fetchOptions.fetchLimit = 1  // Only get the most recent
+        
+        let assets = PHAsset.fetchAssets(in: screenshots, options: fetchOptions)
+        
+        guard let latestScreenshot = assets.firstObject else {
+            print("No screenshots found")
+            completion(nil)
+            return
+        }
+        
+        print("Found screenshot: \(latestScreenshot.pixelWidth)x\(latestScreenshot.pixelHeight)")
         
         // Load the image
         let options = PHImageRequestOptions()
         options.isSynchronous = false
         options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = true
         
         PHImageManager.default().requestImage(
-            for: asset,
+            for: latestScreenshot,
             targetSize: PHImageManagerMaximumSize,
             contentMode: .aspectFit,
             options: options
-        ) { image, _ in
-            completion(image)
+        ) { image, info in
+            if let image = image {
+                print("Loaded screenshot successfully")
+                completion(image)
+            } else {
+                print("Failed to load screenshot")
+                completion(nil)
+            }
         }
     }
 }

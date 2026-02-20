@@ -37,7 +37,7 @@ struct ImageCanvasView: View {
                 // Bolt Rectangle (GREEN)
                 ResizableRectangle(
                     rect: $boltRectangleManager.rect,
-                    containerSize: image != nil ? imageDisplayRect.size : geometry.size,
+                    containerSize: geometry.size,
                     color: .green,
                     onDragEnd: { boltRectangleManager.save() }
                 )
@@ -45,7 +45,7 @@ struct ImageCanvasView: View {
                 // Uber Rectangle (RED)
                 ResizableRectangle(
                     rect: $uberRectangleManager.rect,
-                    containerSize: image != nil ? imageDisplayRect.size : geometry.size,
+                    containerSize: geometry.size,
                     color: .red,
                     onDragEnd: { uberRectangleManager.save() }
                 )
